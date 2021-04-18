@@ -20,7 +20,6 @@ class HttpRequest {
       return HttpRequest.request('POST', url, params);
 
    }
-
    // todo Método static permite q a gente chame ele diretamente sem ter que cria uma instância!!!!
    static request(method, url, params = {}) {
 
@@ -41,9 +40,9 @@ class HttpRequest {
             }
             resolve(obj);
          };
-         // *A primeira linha define uma configuração de cabeçalho da requisição.No caso, estamos definindo qual será o tipo de conteúdo, um JSON.Isso é necessário para uma melhor leitura dos dados enviados
+         // * A primeira linha define uma configuração de cabeçalho da requisição.No caso, estamos definindo qual será o tipo de conteúdo, um JSON.Isso é necessário para uma melhor leitura dos dados enviados
          ajax.setRequestHeader('Content-Type', 'application/json');
-         // *A segunda linha é a responsável por enviar de fato os dados, que serão transformados em uma string JSON
+         // * A segunda linha é a responsável por enviar os dados, que serão transformados em uma string JSON
          ajax.send(JSON.stringify(params));
 
       });

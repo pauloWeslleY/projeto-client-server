@@ -118,7 +118,6 @@ class User {
 
       return new Promise((resolve, reject) => {
          let promise;
-         //! retorna todos usuarios que estão no localStorage e vai cria um array
          if (this.id) {
             promise = HttpRequest.put(`/users/${this.id}`, this.toJSON());
          } else {
