@@ -191,27 +191,21 @@ class UserController {
          user.admin
       );
 
-   } // ! TODO: end method getValues();
+   } // * TODO: end method getValues();
 
    selectAll() {
 
-      HttpRequest.get('/users').then(data => {
-
+      User.getUsersStorage().then(data => {
          data.users.forEach(dataUser => {
-
             let user = new User();
-
             user.loadFromJSON(dataUser);
-
             this.addLine(user);
-
          });
-
       });
 
    }
 
-   // !HACK: O metodo addLine adiciona uma nova linha na tabela
+   // * HACK: O metodo addLine adiciona uma nova linha na tabela
    addLine(dataUser) {
 
       let tr = this.getTr(dataUser);
@@ -222,7 +216,7 @@ class UserController {
 
    }
 
-   // ! HACK: getTr selecia qual tr vai gera
+   // * HACK: getTr selecia qual tr vai gera
    getTr(dataUser, tr = null) {
 
       if (tr === null) tr = document.createElement('tr');
@@ -257,55 +251,40 @@ class UserController {
 
             user.loadFromJSON(JSON.parse(tr.dataset.user));
 
-            user.delete();
+            user.delete().then(data => {
+               tr.remove();
+               this.updateCount();
+            });
 
-            tr.remove();
-
-            this.updateCount();
          }
 
       });
 
       tr.querySelector(".btn-edit").addEventListener("click", e => {
-
          let json = JSON.parse(tr.dataset.user);
-
          this.formUpdateEl.dataset.trIndex = tr.sectionRowIndex;
-
          for (let name in json) {
-
             let field = this.formUpdateEl.querySelector("[name=" + name.replace("_", "") + "]");
-
             if (field) {
-
                switch (field.type) {
                   case 'file':
                      continue;
                      break;
-
                   case 'radio':
                      field = this.formUpdateEl.querySelector("[name=" + name.replace("_", "") + "][value=" + json[name] + "]");
                      field.checked = "true";
                      break;
-
                   case 'checkbox':
                      field.checked = json[name];
                      break;
-
                   default:
                      field.value = json[name];
                }
-
             }
-
          }
-
          this.formUpdateEl.querySelector(".photo").src = json._photo;
-
          this.showPanelUpdate();
-
       });
-
    }; // ! HACK: end method addEventsTR(){};
 
    showPanelCreate() {

@@ -60,50 +60,22 @@ class User {
    }
 
    loadFromJSON(json) {
-
       for (let name in json) {
 
          switch (name) {
             case '_register':
                this[name] = new Date(json[name]);
             break;
-
             default:
-               this[name] = json[name];
+               if (name.substring(0, 1) === '_') this[name] = json[name];
          }
 
       }
-
    }
 
-   // ! NOTE: getUsersStorage() carrega todos os usuarios e adiciona mais um
+   // * NOTE: getUsersStorage() carrega todos os usuarios e adiciona mais um
    static getUsersStorage() {
-
-      let users = [];
-
-      if (localStorage.getItem("users")) {
-
-         users = JSON.parse(localStorage.getItem("users"));
-
-      }
-
-      return users;
-
-   }
-
-   // ! NOTE: metodo que gera ID pra cada usuario
-   getNewID() {
-
-      let usersID = parseInt(localStorage.getItem("usersID"));
-
-      if (!usersID > 0) usersID = 0;
-
-      usersID++;
-
-      localStorage.setItem("usersID", usersID);
-
-      return usersID;
-
+      return Fetch.get('/users');
    }
 
    toJSON() {
@@ -119,9 +91,9 @@ class User {
       return new Promise((resolve, reject) => {
          let promise;
          if (this.id) {
-            promise = HttpRequest.put(`/users/${this.id}`, this.toJSON());
+            promise = Fetch.put(`/users/${this.id}`, this.toJSON());
          } else {
-            promise = HttpRequest.post(`/users`, this.toJSON());
+            promise = Fetch.post(`/users`, this.toJSON());
          }
          promise.then(data => {
             this.loadFromJSON(data);
@@ -135,20 +107,6 @@ class User {
 
 
    delete() {
-
-      let users = User.getUsersStorage();
-
-      users.forEach((userData, index) => {
-
-         if (this._id == userData._id) {
-
-            users.splice(index, 1);
-
-         }
-
-      });
-
-      localStorage.setItem("users", JSON.stringify(users));
-
+      return Fetch.delete(`/users/${this.id}`);
    }
 }

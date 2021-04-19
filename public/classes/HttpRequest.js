@@ -27,7 +27,7 @@ class HttpRequest {
 
          let ajax = new XMLHttpRequest();
          ajax.open(method.toUpperCase(), url);
-         ajax.onerror = err => {
+         ajax.onerror = event => {
             reject(err);
          };
          ajax.onload = event => {
@@ -41,10 +41,9 @@ class HttpRequest {
             resolve(obj);
          };
          // * A primeira linha define uma configuração de cabeçalho da requisição.No caso, estamos definindo qual será o tipo de conteúdo, um JSON.Isso é necessário para uma melhor leitura dos dados enviados
-         ajax.setRequestHeader('Content-Type', 'application/json');
          // * A segunda linha é a responsável por enviar os dados, que serão transformados em uma string JSON
+         ajax.setRequestHeader('Content-Type', 'application/json');
          ajax.send(JSON.stringify(params));
-
       });
 
    }
